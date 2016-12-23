@@ -38,7 +38,11 @@ public class ArangeShips extends javax.swing.JFrame {
         this.setSize(seaAreaPanel.getSize().width + 20, seaAreaPanel.getSize().height + 80);
         addKeyListener(seaAreaPanel);
     }
-    
+
+    public void setGameModel(GameModel _gameModel) {
+        this._gameModel = _gameModel;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

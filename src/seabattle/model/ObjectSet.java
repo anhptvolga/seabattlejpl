@@ -5,9 +5,7 @@
  */
 package seabattle.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -127,5 +125,13 @@ public class ObjectSet {
             res = _objects.get(type).size();
         return res;
     }    
-    
+
+    public static void reset() {
+        SET = new HashMap<TYPE_OBJECT, Integer>() {
+        {   put(TYPE_OBJECT.ShipFour, 1);
+            put(TYPE_OBJECT.ShipThree, 2);
+            put(TYPE_OBJECT.ShipTwo, 3);
+            put(TYPE_OBJECT.ShipOne, 4); }};
+    }
+
 }

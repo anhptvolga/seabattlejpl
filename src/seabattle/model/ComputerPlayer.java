@@ -7,8 +7,16 @@ package seabattle.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import org.jpl7.Compound;
+import org.jpl7.Integer;
+import org.jpl7.Query;
+import org.jpl7.Term;
+import static org.jpl7.Util.intArrayArrayToList;
+import org.jpl7.Variable;
 import seabattle.model.navigation.Cell;
+
 
 /**
  *
@@ -107,37 +115,27 @@ public class ComputerPlayer extends Player {;
      * @return позиция удара
      */
     public Cell nextFire() {
-        Cell res = null;
-        if (_fireDirection != -1 && _lastFireCell != null) { 
-             res = _lastFireCell.next(_fireDirection);
-             while (res == null || Math.abs(res.row()-_lastFireCell.row() + res.column() - _lastFireCell.column()) != 1 || 
-                     _fireResults[res.column()][res.row()] > 1 ||
-                     _fireResults[res.column()][res.row()] < -1) {
-                 _fireDirection = callNextDirect();
-                 if (_fireDirection != -1)
-                    res = _lastFireCell.next(_fireDirection);
-                 else
-                     break;
-             }
-             if (_fireDirection != -1)
-                 return res;
-        }
-        /*
-        do {
-            res = _fireList.remove(0);
-            if (!_destroyedCells.contains(res) && !_hittedCells.contains(res)) {
-                return res;
-            }
-        } while (!_fireList.isEmpty());
-        return res;
-        */
-        res = getCellSumColRowDivisible(4);
-        if (res == null) {
-            res = getCellSumColRowDivisible(2);
-            if (res == null)
-                res = getCellSumColRowDivisible(1);
-        }
-        return res;
+        
+        Variable X = new Variable("X");
+        Variable Y = new Variable("Y");
+        Term FireResult = intArrayArrayToList(this._fireResults);
+        
+        
+        Query.hasSolution("use_module(library(jpl))");
+        Query.hasSolution("consult('src/seabattle/model/firer.pl')");
+        Compound goal = new Compound("calculate_next_cell",
+                new Term[] {X, Y, new Integer(-1), new Integer(-1), FireResult});
+
+        Map<String, Term> resterm = Query.oneSolution(goal);
+        
+        return new Cell(resterm.get("X").intValue(),
+                        resterm.get("Y").intValue());
+
+    }
+    
+    public static void main(String[] args) {
+        ComputerPlayer tmp = new ComputerPlayer(10, 10);
+        tmp.nextFire();
     }
     
     /**

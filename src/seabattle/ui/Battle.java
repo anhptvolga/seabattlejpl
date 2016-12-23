@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import javax.swing.JOptionPane;
 import seabattle.model.ComputerPlayer;
 import seabattle.model.GameModel;
+import seabattle.model.HumanPlayer;
+import seabattle.model.ObjectSet;
 import seabattle.model.events.GameOverEvent;
 import seabattle.model.events.GameOverListener;
 import seabattle.model.events.HitObjectEvent;
@@ -212,6 +214,9 @@ public class Battle extends javax.swing.JFrame implements MissObjectListener,
         _arangeScreen.setVisible(true);
         _arangeScreen.requestFocus();
         _arangeScreen.requestFocusInWindow();
+        ObjectSet.reset();
+        this._arangeScreen.setGameModel(new GameModel(new HumanPlayer(), 
+                        new ComputerPlayer(10, 10), 10, 10));
         this.setVisible(false);
         this.dispose();
     }
