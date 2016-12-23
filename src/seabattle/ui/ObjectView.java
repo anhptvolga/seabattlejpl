@@ -4,17 +4,10 @@ package seabattle.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
-import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import seabattle.model.AbstractLineObject;
 import seabattle.model.Ship;
-import seabattle.model.Submarine;
-import seabattle.model.navigation.Cell;
-import sun.swing.SwingUtilities2;
 
 public class ObjectView extends JPanel {
     
@@ -24,7 +17,7 @@ public class ObjectView extends JPanel {
     private Color _backgroundColor = new Color(172, 172, 172);
     private int _towerPos = -1;
     private static HashMap<Class, Color> _colorShip = new HashMap<Class, Color>() {
-        {put(Ship.class, Color.red); put(Submarine.class, Color.white); } };
+        {put(Ship.class, Color.red); } };
     
     private AbstractLineObject _object;
     

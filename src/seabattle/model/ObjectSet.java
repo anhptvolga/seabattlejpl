@@ -20,11 +20,10 @@ import java.util.Stack;
 public class ObjectSet {
     
     public static enum TYPE_OBJECT { ShipOne, ShipTwo, ShipThree, 
-                                     ShipFour, SubmarieFour };
+                                     ShipFour };
     
     private static HashMap<TYPE_OBJECT, Integer> SET = new HashMap<TYPE_OBJECT, Integer>() {
-        {   put(TYPE_OBJECT.SubmarieFour, 1);
-            put(TYPE_OBJECT.ShipFour, 1);
+        {   put(TYPE_OBJECT.ShipFour, 1);
             put(TYPE_OBJECT.ShipThree, 2);
             put(TYPE_OBJECT.ShipTwo, 3);
             put(TYPE_OBJECT.ShipOne, 4); }};
@@ -87,9 +86,7 @@ public class ObjectSet {
      * @return тип объекта
      */
     private TYPE_OBJECT determiteType(AbstractLineObject obj) {
-        if (obj.getClass() == Submarine.class) {
-            return TYPE_OBJECT.SubmarieFour;
-        } else if (obj.getClass() == Ship.class) {
+        if (obj.getClass() == Ship.class) {
             if (obj.getLength() == 1) {
                 return TYPE_OBJECT.ShipOne;
             }

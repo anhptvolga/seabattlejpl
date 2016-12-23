@@ -8,18 +8,12 @@ package seabattle.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.JPanel;
 import seabattle.model.AbstractLineObject;
-import seabattle.model.ObjectFactory;
-import seabattle.model.ObjectSet;
 import seabattle.model.Player;
-import seabattle.model.SeaArea;
 import seabattle.model.Ship;
-import seabattle.model.Submarine;
 import seabattle.model.navigation.Cell;
 
 /**
@@ -44,7 +38,7 @@ public class BattlePlayerSeaPanel extends JPanel {
     private int _widthField = 10;
     
     private static HashMap<Class, Color> _colorShip = new HashMap<Class, Color>() {
-        {put(Ship.class, Color.red); put(Submarine.class, Color.white); } };
+        {put(Ship.class, Color.red); } };
     
     private Player _player = null;
     
@@ -118,19 +112,11 @@ public class BattlePlayerSeaPanel extends JPanel {
             for (int i = 0; i < obj.getLength(); ++i) {
                 drawDiamond(g, xleft, yleft + i * CELL_SIZE);
             }
-            if (obj.getClass() == Submarine.class) {
-                Submarine tmp = (Submarine)obj;
-                g.fillRect(xleft + 3*CELL_SIZE/8, yleft + CELL_SIZE*tmp.getTowerDistance() + 3*CELL_SIZE/8, CELL_SIZE/4+2, CELL_SIZE/4+2);
-            }
         } else { // ngang
             g.fillOval(xleft, yleft, obj.getLength()*CELL_SIZE, CELL_SIZE);
             g.setColor(_colorShip.get(obj.getClass()));
             for (int i = 0; i < obj.getLength(); ++i) {
                 drawDiamond(g, xleft + i * CELL_SIZE, yleft);
-            }
-            if (obj.getClass() == Submarine.class) {
-                Submarine tmp = (Submarine)obj;
-                g.fillRect(xleft + CELL_SIZE*tmp.getTowerDistance() + 3*CELL_SIZE/8, yleft + 3*CELL_SIZE/8, CELL_SIZE/4+2, CELL_SIZE/4+2);
             }
         }
         

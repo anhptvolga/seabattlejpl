@@ -33,9 +33,6 @@ public class ObjectFactory {
             case ShipFour:
                 res = new Ship(area, 4);
                 break;
-            case SubmarieFour:
-                res = new Submarine(area, 4);
-                break;
         };
         return res;
     }

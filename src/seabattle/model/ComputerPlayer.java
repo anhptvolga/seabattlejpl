@@ -8,11 +8,6 @@ package seabattle.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import jdk.internal.dynalink.beans.CallerSensitiveDetector;
-import seabattle.model.events.HitObjectEvent;
-import seabattle.model.events.HitObjectListener;
-import seabattle.model.events.MissObjectEvent;
-import seabattle.model.events.MissObjectListener;
 import seabattle.model.navigation.Cell;
 
 /**
@@ -217,7 +212,6 @@ public class ComputerPlayer extends Player {;
         } else if (direct == 3) {
             cell = new Cell(width-1, height-1);
         }
-        arangeShipType(set, sea, ObjectSet.TYPE_OBJECT.SubmarieFour, direct, cell);
         arangeShipType(set, sea, ObjectSet.TYPE_OBJECT.ShipFour, direct, cell);
         arangeShipType(set, sea, ObjectSet.TYPE_OBJECT.ShipThree, direct, cell);
         arangeShipType(set, sea, ObjectSet.TYPE_OBJECT.ShipTwo, direct, cell);
@@ -274,10 +268,6 @@ public class ComputerPlayer extends Player {;
         int amount = set.getCurrentAmountObject(type);
         while (amount > 0) {
             AbstractLineObject obj = set.getObject(type);
-            if (obj.getClass() == Submarine.class) {
-                Random randomer = new Random();
-                ((Submarine)obj).setTowerSubmarineDistance(randomer.nextInt(4));
-            }
             if (direct == 0 || direct == 2) {
                     obj.rotate90();
             }

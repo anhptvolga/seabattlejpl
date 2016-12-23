@@ -80,18 +80,7 @@ public abstract class Player {
             }
             AbstractLineObject obj = target.getObject(); 
             if (obj != null) {          // cell has object
-                if (obj.getClass() == Submarine.class) {    // submarine
-                    Submarine sub = (Submarine) obj;
-                    if (sub.getTowerSubmarine().isHitted()) { // hit the tower
-                        target.destroy();
-                        _destroyedCells.add(target);
-                            notifyHit(target);
-                        return true;
-                    } else  {
-                        notifyMiss(target);
-                        return false;
-                    }
-                } else if (obj.getClass() == Ship.class) { 
+                if (obj.getClass() == Ship.class) { 
                     target.destroy();
                     _destroyedCells.add(target);
                     notifyHit(target);

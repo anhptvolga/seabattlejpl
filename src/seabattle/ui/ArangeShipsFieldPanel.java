@@ -18,7 +18,6 @@ import seabattle.model.ObjectFactory;
 import seabattle.model.ObjectSet;
 import seabattle.model.SeaArea;
 import seabattle.model.Ship;
-import seabattle.model.Submarine;
 import seabattle.model.navigation.Cell;
 
 public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseListener, MouseMotionListener{
@@ -28,11 +27,10 @@ public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseL
     private static final int X_SET = 100;
     private static final int X_FIELD = X_SET + CELL_SIZE * 5;
     private static final int GAP = 2;
-    private static final int Y_SUBMARINE = 10;
-    private static final int Y_SHIPFOUR = CELL_SIZE + 20;
-    private static final int Y_SHIPTHREE = CELL_SIZE*2 + 30;
-    private static final int Y_SHIPTWO = CELL_SIZE*3 + 40;
-    private static final int Y_SHIPONE = CELL_SIZE*4 + 50;
+    private static final int Y_SHIPFOUR = 10;
+    private static final int Y_SHIPTHREE = CELL_SIZE + 20;
+    private static final int Y_SHIPTWO = CELL_SIZE*2 + 30;
+    private static final int Y_SHIPONE = CELL_SIZE*3 + 40;
   
     private static final Color BACKGROUND_COLOR = new Color(0, 101, 255);
     private static final Color SHIP_BACKGROUND_COLOR = new Color(172, 172, 172);
@@ -42,7 +40,7 @@ public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseL
     private int _widthField = 10;
     
     private static HashMap<Class, Color> _colorShip = new HashMap<Class, Color>() {
-        {put(Ship.class, Color.red); put(Submarine.class, Color.white); } };
+        {put(Ship.class, Color.red); } };
     
     private ObjectSet _objectSet = null;
     private AbstractLineObject _curObj = null;
@@ -93,12 +91,10 @@ public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseL
         g.setColor(Color.BLACK);   
         // draw sets
         if (_objectSet != null) {
-            g.drawString("Подлодка " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.SubmarieFour), X_TEXT, CELL_SIZE);
-            g.drawString("Линкор " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipFour), X_TEXT, CELL_SIZE*2 + 10);
-            g.drawString("Крейсер " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipThree), X_TEXT, CELL_SIZE*3 + 20);
-            g.drawString("Эсминец " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipTwo), X_TEXT, CELL_SIZE*4 + 30);
-            g.drawString("Катер " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipOne), X_TEXT, CELL_SIZE*5 + 40);
-            drawSetOf(g, ObjectSet.TYPE_OBJECT.SubmarieFour, X_SET, Y_SUBMARINE);
+            g.drawString("Линкор " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipFour), X_TEXT, CELL_SIZE);
+            g.drawString("Крейсер " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipThree), X_TEXT, CELL_SIZE*2 + 10);
+            g.drawString("Эсминец " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipTwo), X_TEXT, CELL_SIZE*3 + 20);
+            g.drawString("Катер " + _objectSet.getCurrentAmountObject(ObjectSet.TYPE_OBJECT.ShipOne), X_TEXT, CELL_SIZE*4 + 30);
             drawSetOf(g, ObjectSet.TYPE_OBJECT.ShipFour, X_SET, Y_SHIPFOUR);
             drawSetOf(g, ObjectSet.TYPE_OBJECT.ShipThree, X_SET, Y_SHIPTHREE);
             drawSetOf(g, ObjectSet.TYPE_OBJECT.ShipTwo, X_SET, Y_SHIPTWO);
@@ -141,19 +137,11 @@ public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseL
             for (int i = 0; i < obj.getLength(); ++i) {
                 drawDiamond(g, xleft, yleft + i * CELL_SIZE);
             }
-            if (obj.getClass() == Submarine.class) {
-                Submarine tmp = (Submarine)obj;
-                g.fillRect(xleft + 3*CELL_SIZE/8, yleft + CELL_SIZE*tmp.getTowerDistance() + 3*CELL_SIZE/8, CELL_SIZE/4+2, CELL_SIZE/4+2);
-            }
         } else { // ngang
             g.fillOval(xleft, yleft, obj.getLength()*CELL_SIZE, CELL_SIZE);
             g.setColor(_colorShip.get(obj.getClass()));
             for (int i = 0; i < obj.getLength(); ++i) {
                 drawDiamond(g, xleft + i * CELL_SIZE, yleft);
-            }
-            if (obj.getClass() == Submarine.class) {
-                Submarine tmp = (Submarine)obj;
-                g.fillRect(xleft + CELL_SIZE*tmp.getTowerDistance() + 3*CELL_SIZE/8, yleft + 3*CELL_SIZE/8, CELL_SIZE/4+2, CELL_SIZE/4+2);
             }
         }
         
@@ -196,14 +184,6 @@ public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseL
         int top = GAP + CELL_SIZE * (pos.row()-1);
         
         return new Point(left, top);
-    }
-
-    private int checkSubmaireSet(int x, int y) {
-        if (Y_SUBMARINE + GAP < y && y < Y_SUBMARINE + GAP + CELL_SIZE
-                && X_SET + GAP < x && x < X_SET + GAP + 4*CELL_SIZE) {
-            return (int)(x-(X_SET + GAP))/CELL_SIZE;
-        }
-        return -1;
     }
     
     private int checkShipFourSet(int x, int y) {
@@ -257,17 +237,13 @@ public class ArangeShipsFieldPanel extends JPanel implements KeyListener, MouseL
     public void mouseClicked(MouseEvent e) {
         _xCurObj = e.getX();
         _yCurObj = e.getY();
-        int submarine = checkSubmaireSet(_xCurObj, _yCurObj);
         int four = checkShipFourSet(_xCurObj, _yCurObj);
         int three = checkShipThreeSet(_xCurObj, _yCurObj);
         int two = checkShipTwoSet(_xCurObj, _yCurObj);
         int one = checkShipOneSet(_xCurObj, _yCurObj);
         
         if (_curObj == null) {
-            if (submarine >= 0) {
-                _curObj = _objectSet.getObject(ObjectSet.TYPE_OBJECT.SubmarieFour);
-                ((Submarine)_curObj).setTowerSubmarineDistance(submarine);
-            } else if (four > 0) {
+            if (four > 0) {
                 _curObj = _objectSet.getObject(ObjectSet.TYPE_OBJECT.ShipFour);
             } else if (three > 0) {
                 _curObj = _objectSet.getObject(ObjectSet.TYPE_OBJECT.ShipThree);
