@@ -133,11 +133,6 @@ public class ComputerPlayer extends Player {;
 
     }
     
-    public static void main(String[] args) {
-        ComputerPlayer tmp = new ComputerPlayer(10, 10);
-        tmp.nextFire();
-    }
-    
     /**
      * Стрелять поле другого игрока
      * @param target - null - позиция автоматически вычилить
