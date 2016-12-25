@@ -115,59 +115,63 @@ public class ComputerPlayer extends Player {;
      * @return позиция удара
      */
     public Cell nextFire() {
-        
+//        System.out.println("-------------------------------");
         Variable X = new Variable("X");
         Variable Y = new Variable("Y");
         Term FireResult = intArrayArrayToList(this._fireResults);
-        
+        int x = -1, y = -1;
         
         Query.hasSolution("use_module(library(jpl))");
         Query.hasSolution("consult('src/seabattle/model/firer.pl')");
+        if (this._baseHittedCell != null) {
+            y = this._baseHittedCell.row();
+            x = this._baseHittedCell.column();
+            System.out.printf("last: %d %d\n", x, y);
+        } 
         Compound goal = new Compound("calculate_next_cell",
-                new Term[] {X, Y, new Integer(-1), new Integer(-1), FireResult});
+                new Term[] {X, Y, new Integer(x), new Integer(y), FireResult});
 
-        Map<String, Term> resterm = Query.oneSolution(goal);
-        
-        return new Cell(resterm.get("X").intValue(),
-                        resterm.get("Y").intValue());
-
+        Map<String, Term> resterm = null;
+        Query a = new Query(goal);
+        resterm = Query.oneSolution(goal);
+        if (resterm == null || !resterm.get("X").isInteger() || !resterm.get("Y").isInteger()) {
+            resterm = Query.oneSolution(new Compound("calculate_next_cell",
+                new Term[] {X, Y, new Integer(-1), new Integer(-1), FireResult}));
+        }
+        return new Cell(resterm.get("Y").intValue(),
+                resterm.get("X").intValue());
     }
     
     /**
      * Стрелять поле другого игрока
      * @param target - null - позиция автоматически вычилить
      */
-    public boolean fire(Cell target) {
+    @Override
+    public int fire(Cell target) {
+        System.out.println("----------------");
         Cell pos = nextFire();
-        System.out.printf("%d %d\n", pos.row(), pos.column());
-        if (super.fire(pos)) {
-            _fireResults[pos.column()][pos.row()] += 1;
-            _curBittingShip.add(pos);
-            if (_fireDirection == 0 || _fireDirection == 2) {
-                isHorizontalShip = true;
-            }
-            if (_fireDirection == -1) {
-                _fireDirection = 0;
+        int res = super.fire(pos);
+        System.out.printf("Fire: %d %d -> %d\n", pos.column(), pos.row(), res);
+        switch (res) {
+            case 1:
+                _fireResults[pos.column()][pos.row()] = 1;
                 _lastFireCell = pos;
                 _baseHittedCell = pos;
-            }
-            _lastFireCell = pos;
-            // fire again
-            fire(null);
-        }
-        else {
-            _fireResults[pos.column()][pos.row()] -= 1;
-            _lastFireCell = null;
-            if (_fireDirection >= 0)
-                _fireDirection = callNextDirect();
-            if (_fireDirection == -1) {
+                _curBittingShip.add(pos);
+                fire(null);
+                break;
+            case 2:
+                _fireResults[pos.column()][pos.row()] = 1;
                 _baseHittedCell = null;
-                isHorizontalShip = false;
                 markingAroundDestroyedShip();
-                _curBittingShip.clear();
-            }
+                fire(null);
+                break;
+            default:
+                _fireResults[pos.column()][pos.row()] = -1;
+                _lastFireCell = null;
+                break;
         }
-        return false;
+        return 0;
     }
     
     /**
@@ -180,10 +184,11 @@ public class ComputerPlayer extends Player {;
         for (Cell cell : _curBittingShip) {
             for (int i = 0; i < 8; ++i) {
                 if (Cell.isValid(cell.row() + x[i], cell.column() + y[i])) {
-                    _fireResults[cell.column() + y[i]][cell.row() + x[i]] = -10;
+                    _fireResults[cell.column() + y[i]][cell.row() + x[i]] = -1;
                 }
             }
         }
+        this._curBittingShip.clear();
     }
     
     /**

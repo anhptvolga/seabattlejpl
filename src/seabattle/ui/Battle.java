@@ -170,6 +170,9 @@ public class Battle extends javax.swing.JFrame implements MissObjectListener,
         if (target != null) {
             _gameModel.getActivePlayer().fire(target);
         }
+        battlePlayerSeaPanel1.repaint();
+        battlePlayerSeaPanel2.repaint();
+        this.repaint();
     }
     
 
@@ -210,11 +213,10 @@ public class Battle extends javax.swing.JFrame implements MissObjectListener,
     @Override
     public void GameOverPerform(GameOverEvent e) {
         activePanel.repaint();
-        JOptionPane.showMessageDialog(null, "Победитель: " + _gameModel.getActivePlayer().getName(), "Battle end!", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Победитель: " + e.getWinner(), "Battle end!", JOptionPane.INFORMATION_MESSAGE);
         _arangeScreen.setVisible(true);
         _arangeScreen.requestFocus();
         _arangeScreen.requestFocusInWindow();
-        ObjectSet.reset();
         this._arangeScreen.setGameModel(new GameModel(new HumanPlayer(), 
                         new ComputerPlayer(10, 10), 10, 10));
         this.setVisible(false);

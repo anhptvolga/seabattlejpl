@@ -13,8 +13,17 @@ import java.util.EventObject;
  */
 public class GameOverEvent extends EventObject {
 
+    String winner;
     public GameOverEvent(Object source) {
         super(source);
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
     
 }

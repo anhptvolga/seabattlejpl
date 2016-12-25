@@ -41,6 +41,8 @@ public class ArangeShips extends javax.swing.JFrame {
 
     public void setGameModel(GameModel _gameModel) {
         this._gameModel = _gameModel;
+        seaAreaPanel.setObjectSet(new ObjectSet(_gameModel.getActiveSeaArea()));
+        seaAreaPanel.setSeaArea(_gameModel.getActiveSeaArea());
     }
 
     /**

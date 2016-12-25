@@ -107,8 +107,10 @@ public class GameModel {
         for (AbstractLineObject obj : objs) {
             isDestroyAll = obj.isDestroyed() && isDestroyAll;
         }       
-        if (isDestroyAll)
+        if (isDestroyAll) {
+            _gameoverEvent.setWinner(_activePlayer.getName());
             notifyGameOver();
+        }
     }
     
     // -------- gameover listeners ---------

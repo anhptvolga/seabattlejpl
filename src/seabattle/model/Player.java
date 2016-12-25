@@ -66,32 +66,27 @@ public abstract class Player {
      * Стрелять море соперника
      * @param target - позиция удара
      */
-    public boolean fire(Cell target) {
+    public int fire(Cell target) {
         if (target == null) {
             notifyMiss(target);
-            return false;
+            return 0;
         }
         
         target = _sea.getCell(target.row(), target.column());
-        if (!target.isDestroyed()) {    // not destroyed
-            if (!_hittedCells.contains(target)) {
-                _hittedCells.add(target);
-                target.hit();
-            }
-            AbstractLineObject obj = target.getObject(); 
-            if (obj != null) {          // cell has object
-                if (obj.getClass() == Ship.class) { 
-                    target.destroy();
-                    _destroyedCells.add(target);
-                    notifyHit(target);
-                    return true;
-                }
-            } else {    // cell empty
-                notifyMiss(target);
-                return false;
-            }
+        if (!_hittedCells.contains(target)) {
+            _hittedCells.add(target);
+            target.hit();
         }
-        return false;
+        AbstractLineObject obj = target.getObject(); 
+        if (obj != null) {          // cell has object
+                target.destroy();
+                _destroyedCells.add(target);
+                notifyHit(target);
+                return obj.isDestroyed() ? 2 : 1;
+        } else {    // cell empty
+            notifyMiss(target);
+            return 0;
+        }
     }
     
     /**
