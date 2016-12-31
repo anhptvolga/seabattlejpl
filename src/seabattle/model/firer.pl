@@ -121,11 +121,11 @@ getDirect(X, Y, FireResult, Direct) :-
 calculate_next_cell(X, Y, -1, -1, FireResult) :-
     get_possible_point(PosPoint, FireResult, 0, 0),
     length(PosPoint, Len),
-    write(Len), write("--"),
+    /* write(Len), write("--"), */
     random_between(1, Len, Pos),
     /* write(Pos), nl, */
-    nth1(Pos, PosPoint, [X, Y], _),
-    write("_"),write(X),write("_"),write(Y),nl.
+    nth1(Pos, PosPoint, [X, Y], _).
+    /* write("_"),write(X),write("_"),write(Y),nl. */ 
 
 calculate_next_cell(X, Y, OldX, OldY, FireResult) :-
     getDirect(OldX, OldY, FireResult, Direct),
@@ -140,5 +140,5 @@ calculate_next_cell(X, Y, OldX, OldY, FireResult) :-
     (
       calc_vertical(OldX, OldY, X, Y, FireResult);
       calc_horizon(OldX, OldY, X, Y, FireResult)
-    ),
-    write("_"),write(X),write("_"),write(Y),nl.
+    ).
+    /* write("_"),write(X),write("_"),write(Y),nl */

@@ -122,11 +122,11 @@ public class ComputerPlayer extends Player {;
         int x = -1, y = -1;
         
         Query.hasSolution("use_module(library(jpl))");
-        Query.hasSolution("consult('src/seabattle/model/firer.pl')");
+        Query.hasSolution("consult('firer.pl')");
         if (this._baseHittedCell != null) {
             y = this._baseHittedCell.row();
             x = this._baseHittedCell.column();
-            System.out.printf("last: %d %d\n", x, y);
+//            System.out.printf("last: %d %d\n", x, y);
         } 
         Compound goal = new Compound("calculate_next_cell",
                 new Term[] {X, Y, new Integer(x), new Integer(y), FireResult});
@@ -148,10 +148,10 @@ public class ComputerPlayer extends Player {;
      */
     @Override
     public int fire(Cell target) {
-        System.out.println("----------------");
+//        System.out.println("----------------");
         Cell pos = nextFire();
         int res = super.fire(pos);
-        System.out.printf("Fire: %d %d -> %d\n", pos.column(), pos.row(), res);
+//        System.out.printf("Fire: %d %d -> %d\n", pos.column(), pos.row(), res);
         switch (res) {
             case 1:
                 _fireResults[pos.column()][pos.row()] = 1;
